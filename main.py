@@ -1,4 +1,7 @@
 import pygame
+from vector import Vector
+import world
+import bot
 
 pygame.init()
 
@@ -8,6 +11,9 @@ def main():
     clock = pygame.time.Clock()
     fps = 30
 
+    w = world.World()
+    w.add_bot(bot.Bot(Vector(10, 10), None))
+
     running = True
     while running:
         for e in pygame.event.get():
@@ -16,6 +22,7 @@ def main():
             if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
                 running = False
         screen.fill(pygame.color.Color("white"))
+        w.display(screen, Vector(50, 40))
         pygame.display.update()
         dt = clock.tick(fps)
 
