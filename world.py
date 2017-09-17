@@ -1,7 +1,8 @@
 class World:
-    def __init__(self):
+    def __init__(self, size):
         self.bots = []
         self.bullets = []
+        self.size = size
 
     def add_bot(self, bot):
         self.bots.append(bot)
@@ -22,11 +23,22 @@ class World:
         for bullet in self.bullets:
             for bot in self.bots:
                 if bullet.owner is not bot and bullet.collidesWith(bot):
-                    print("Bullet and bot collided.")
+                    bot.chasis.hp -= bullet.damage
                     self.bullets.remove(bullet)
+                    if bot.chasis.hp <= 0.0:
+                        self.bots.remove(bot)
+            if self.isOutOfBounds(bullet.pos):
+                self.bullets.remove(bullet)
 
     def display(self, screen, pos):
         for b in self.bots:
             b.display(screen, pos)
         for b in self.bullets:
             b.display(screen, pos)
+
+    def isOutOfBounds(self, pos):
+        if pos.x < 0.0 or pos.x > self.size[0]:
+            return True
+        if pos.y < 0.0 or pos.y > self.size[1]:
+            return True
+        return False

@@ -3,9 +3,10 @@ import pygame
 from vector import *
 
 class Chasis:
-    def __init__(self, bot, capacity):
+    def __init__(self, bot, capacity, hp):
         self.bot = bot
         self.capacity = capacity
+        self.hp = hp
 
 class Body:
     def __init__(self, bot, weight):
@@ -42,9 +43,10 @@ class Motor:
         self.torque = torque
 
 class Bullet:
-    def __init__(self, owner, pos, velocity, size=3):
+    def __init__(self, owner, pos, velocity, damage=1, size=3):
         self.owner = owner
         self.pos = pos
+        self.damage = damage
         self.size = size
         self.velocity = (velocity if type(velocity) == Vector else Vector(*velocity))
 
@@ -63,7 +65,7 @@ class Bullet:
 class Bot:
     def __init__(self, pos, chasis=None, body=None, size=10):
         self.pos = pos
-        self.chasis = (chasis if chasis != None else Chasis(self, 0))
+        self.chasis = (chasis if chasis != None else Chasis(self, 0, 5))
         self.body = (body if body != None else Body(self, 0))
         self.size = size
         self.velocity = Vector(0.0, 0.0)

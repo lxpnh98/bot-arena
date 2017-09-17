@@ -13,7 +13,7 @@ def main():
     fps = 30
     dt = 0.0
 
-    w = world.World()
+    w = world.World(screen_size)
     for _ in range(4):
         b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)))
         b.set_velocity(Vector(random.random() - 0.5, random.random() - 0.5).dot(Vector(10.0, 10.0)))
@@ -29,7 +29,7 @@ def main():
         #w.bots[0].accelerate(Vector(10.0, 0) * dt)
         w.update(dt)
         screen.fill(pygame.color.Color("white"))
-        w.display(screen, Vector(50, 40))
+        w.display(screen, Vector(0, 0))
         pygame.display.update()
         dt = clock.tick(fps) / 1000.
 
