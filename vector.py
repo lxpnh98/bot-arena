@@ -14,9 +14,15 @@ class Vector:
     def __mul__(self, scalar):
         return Vector(self.x * scalar, self.y * scalar)
 
-    def length(self):
-        return math.sqrt(self.x ** 2 + self.y ** 2)
+    def dot(self, other):
+        return Vector(self.x * other.x, self.y * other.y)
 
+    def length(self):
+        return math.sqrt(self.dist2())
+
+    def dist2(self):
+        return self.x ** 2 + self.y ** 2
+        
     def normalize(self):
         return Vector(self.x, self.y) * (1 / self.length())
 

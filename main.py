@@ -1,3 +1,4 @@
+import random
 import pygame
 from vector import Vector
 import world
@@ -13,8 +14,10 @@ def main():
     dt = 0.0
 
     w = world.World()
-    w.add_bot(bot.Bot(Vector(10, 10)))
-    w.bots[0].set_velocity((5.0, 3.0))
+    for _ in range(4):
+        b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)))
+        b.set_velocity(Vector(random.random() - 0.5, random.random() - 0.5).dot(Vector(10.0, 10.0)))
+        w.add_bot(b)
 
     running = True
     while running:
@@ -23,7 +26,7 @@ def main():
                 running = False
             if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
                 running = False
-        w.bots[0].accelerate(Vector(10.0, 0) * dt)
+        #w.bots[0].accelerate(Vector(10.0, 0) * dt)
         w.update(dt)
         screen.fill(pygame.color.Color("white"))
         w.display(screen, Vector(50, 40))
