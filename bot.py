@@ -72,17 +72,24 @@ class Bot:
 
     def update(self, dt):
         self.body.update(dt)
+
+        # Decision making
+        
+
         self.pos += self.velocity * dt
         return self.shoot(self.velocity)
 
     def display(self, screen, pos):
         pygame.draw.circle(screen, pygame.color.Color("black"), (self.pos + pos).toInt().toTuple(), self.size, 0)
 
-    def set_velocity(self, velocity):
+    def setVelocity(self, velocity):
         if type(velocity) == Vector:
             self.velocity = velocity
         else:
             self.velocity = Vector(*velocity)
+
+    def getHP(self):
+        return self.chasis.hp
 
     def accelerate(self, acceleration):
         if type(acceleration) == Vector:

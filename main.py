@@ -13,11 +13,11 @@ def main():
     fps = 30
     dt = 0.0
 
-    w = world.World(screen_size)
+    w = world.World(Vector(*screen_size))
     for _ in range(4):
         b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)))
-        b.set_velocity(Vector(random.random() - 0.5, random.random() - 0.5).dot(Vector(10.0, 10.0)))
-        w.add_bot(b)
+        b.setVelocity(Vector(random.random() - 0.5, random.random() - 0.5).dot(Vector(100.0, 100.0)))
+        w.addBot(b)
 
     running = True
     while running:

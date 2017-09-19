@@ -4,7 +4,7 @@ class World:
         self.bullets = []
         self.size = size
 
-    def add_bot(self, bot):
+    def addBot(self, bot):
         self.bots.append(bot)
 
     def update(self, dt):
@@ -19,13 +19,14 @@ class World:
             for b2 in self.bots:
                 if b1 is not b2 and b1.collidesWith(b2):
                     print("Bots collided.")
+            self.putInBounds(b1)
 
         for bullet in self.bullets:
             for bot in self.bots:
                 if bullet.owner is not bot and bullet.collidesWith(bot):
                     bot.chasis.hp -= bullet.damage
                     self.bullets.remove(bullet)
-                    if bot.chasis.hp <= 0.0:
+                    if bot.getHP() <= 0.0:
                         self.bots.remove(bot)
             if self.isOutOfBounds(bullet.pos):
                 self.bullets.remove(bullet)
@@ -37,8 +38,24 @@ class World:
             b.display(screen, pos)
 
     def isOutOfBounds(self, pos):
-        if pos.x < 0.0 or pos.x > self.size[0]:
+        if pos.x < 0.0 or pos.x > self.size.x:
             return True
-        if pos.y < 0.0 or pos.y > self.size[1]:
+        if pos.y < 0.0 or pos.y > self.size.y:
             return True
         return False
+
+    def putInBounds(self, bot):
+        d1 = bot.pos.x - bot.size 
+        d2 = bot.pos.x + bot.size 
+        if d1 < 0:
+            bot.pos.x -= d1
+        elif d2 > self.size.x:
+            bot.pos.x -= d2 - self.size.x
+
+        d3 = bot.pos.y - bot.size 
+        d4 = bot.pos.y + bot.size 
+        if d3 < 0:
+            bot.pos.y -= d3
+        elif d4 > self.size.y:
+            bot.pos.y -= d4 - self.size.y
+
