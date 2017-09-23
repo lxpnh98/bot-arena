@@ -1,67 +1,9 @@
 import pygame
 
 from vector import *
+from components import *
+from bullet import *
 
-class Chasis:
-    def __init__(self, bot, capacity, hp):
-        self.bot = bot
-        self.capacity = capacity
-        self.hp = hp
-
-class Body:
-    def __init__(self, bot, weight):
-        self.bot = bot
-        self.weight = weight
-        self.camera = None
-        self.weapon = Weapon(bot)
-        self.motor = Motor(bot)
-
-    def update(self, dt):
-        self.weapon.update(dt)
-
-class Weapon:
-    def __init__(self, bot, power=100, reload_time=1):
-        self.bot = bot
-        self.power = power
-        self._reload_time = reload_time
-        self._time_till_reload = None
-
-    def update(self, dt):
-        if self._time_till_reload != None:
-            self._time_till_reload -= dt
-            if self._time_till_reload < 0.0:
-                self._time_till_reload = None
-        
-    def shoot(self, direction):
-        if self._time_till_reload == None:
-            self._time_till_reload = self._reload_time
-            return Bullet(self.bot, self.bot.pos, direction.normalize() * self.power)
-
-class Motor:
-    def __init__(self, bot, torque=1):
-        self.bot = bot
-        self.torque = torque
-
-class Bullet:
-    def __init__(self, owner, pos, velocity, damage=1, size=3):
-        self.owner = owner
-        self.pos = pos
-        self.damage = damage
-        self.size = size
-        self.velocity = (velocity if type(velocity) == Vector else Vector(*velocity))
-
-    def update(self, dt):
-        self.pos += self.velocity * dt
-
-    def display(self, screen, pos):
-        pygame.draw.circle(screen, pygame.color.Color("black"), (self.pos + pos).toInt().toTuple(), self.size, 0)
-
-    def collidesWith(self, bot):
-        if (bot.pos - self.pos).dist2() <= (bot.size + self.size)**2:
-            return True
-        else:
-            return False
-        
 class Bot:
     def __init__(self, pos, chasis=None, body=None, size=10):
         self.pos = pos
@@ -70,17 +12,32 @@ class Bot:
         self.size = size
         self.velocity = Vector(0.0, 0.0)
 
-    def update(self, dt):
+
+    def update(self, dt, bot_list):
         self.body.update(dt)
 
         # Decision making
+        min_length_bot = None
+        min_length = None
+        for b in bot_list:
+            if b is not self:
+                b_dist = (b.pos - self.pos).length()
+                if min_length_bot == None or min_length > b_dist:
+                    min_length_bot = b
+                    min_length = b_dist
         
-
         self.pos += self.velocity * dt
-        return self.shoot(self.velocity)
+        if min_length_bot != None:
+            shoot_direction = min_length_bot.pos - self.pos
+            self.body.weapon.turn(shoot_direction.angle())
+            return self.shoot()
+        else:
+            return None
 
     def display(self, screen, pos):
         pygame.draw.circle(screen, pygame.color.Color("black"), (self.pos + pos).toInt().toTuple(), self.size, 0)
+        weapon_pos = (self.pos + pos) + self.body.weapon.getDirection() * (self.size + 2)
+        pygame.draw.line(screen, pygame.color.Color("black"), (self.pos + pos).toInt().toTuple(), weapon_pos.toInt().toTuple(), 1)
 
     def setVelocity(self, velocity):
         if type(velocity) == Vector:
@@ -97,8 +54,8 @@ class Bot:
         else:
             self.velocity += Vector(*acceleration)
 
-    def shoot(self, direction):
-        return self.body.weapon.shoot(direction)
+    def shoot(self):
+        return self.body.weapon.shoot()
 
     def collidesWith(self, bot):
         if (bot.pos - self.pos).dist2() <= (bot.size + self.size)**2:

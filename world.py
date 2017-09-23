@@ -9,7 +9,7 @@ class World:
 
     def update(self, dt):
         for b in self.bots:
-            bullet = b.update(dt)
+            bullet = b.update(dt, self.bots)
             if bullet != None:
                 self.bullets.append(bullet)
         for b in self.bullets:
@@ -29,7 +29,8 @@ class World:
                     if bot.getHP() <= 0.0:
                         self.bots.remove(bot)
             if self.isOutOfBounds(bullet.pos):
-                self.bullets.remove(bullet)
+                if bullet in self.bullets:
+                    self.bullets.remove(bullet)
 
     def display(self, screen, pos):
         for b in self.bots:

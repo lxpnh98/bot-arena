@@ -26,6 +26,9 @@ class Vector:
     def normalize(self):
         return Vector(self.x, self.y) * (1 / self.length())
 
+    def angle(self):
+        return math.atan2(self.x, self.y)
+
     def toInt(self):
         return Vector(int(self.x), int(self.y))
 
