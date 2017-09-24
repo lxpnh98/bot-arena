@@ -32,9 +32,16 @@ class Weapon:
         self._time_till_reload = None
 
     def update(self, dt):
-        angle_diff = self._target_angle - self.angle
+        if abs(self._target_angle - self.angle) < abs(self._target_angle - (self.angle + 2*math.pi)):
+            angle_diff = self._target_angle - self.angle
+        else:
+            angle_diff = self._target_angle - (self.angle + 2*math.pi)
         angle_direction = (1 if angle_diff > 0 else -1)
-        self.angle += angle_direction * min(self.turn_speed, abs(angle_diff)) * dt
+        if (angle_direction * self.turn_speed * dt) > abs(angle_diff):
+            self.angle += angle_direction * abs(angle_diff) * dt
+        else:
+            self.angle += angle_direction * self.turn_speed * dt
+
         if self._time_till_reload != None:
             self._time_till_reload -= dt
             if self._time_till_reload < 0.0:
