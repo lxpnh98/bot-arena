@@ -18,6 +18,9 @@ class Body:
     def update(self, dt):
         self.weapon.update(dt)
 
+    def getWeight(self):
+        return self.weight
+
 class Weapon:
     def __init__(self, bot, angle = 0, turn_speed = math.pi, power=100, reload_time=1):
         self.bot = bot

@@ -5,13 +5,12 @@ from components import *
 from bullet import *
 
 class Bot:
-    def __init__(self, pos, chasis=None, body=None, size=10):
+    def __init__(self, pos, chasis=None, body=None, size=20):
         self.pos = pos
         self.chasis = (chasis if chasis != None else Chasis(self, 0, 5))
-        self.body = (body if body != None else Body(self, 0))
+        self.body = (body if body != None else Body(self, 2))
         self.size = size
         self.velocity = Vector(0.0, 0.0)
-
 
     def update(self, dt, bot_list):
         self.body.update(dt)
@@ -36,17 +35,22 @@ class Bot:
 
     def display(self, screen, pos):
         pygame.draw.circle(screen, pygame.color.Color("black"), (self.pos + pos).toInt().toTuple(), self.size, 0)
-        weapon_pos = (self.pos + pos) + self.body.weapon.getDirection() * (self.size + 2)
-        pygame.draw.line(screen, pygame.color.Color("black"), (self.pos + pos).toInt().toTuple(), weapon_pos.toInt().toTuple(), 1)
+        weapon_pos = (self.pos + pos) + self.body.weapon.getDirection() * (self.size + 4)
+        pygame.draw.line(screen, pygame.color.Color("black"), (self.pos + pos).toInt().toTuple(), weapon_pos.toInt().toTuple(), 3)
 
     def setVelocity(self, velocity):
         if type(velocity) == Vector:
             self.velocity = velocity
         else:
             self.velocity = Vector(*velocity)
+        if self.velocity.length() > self.getMaxSpeed():
+            self.velocity *= self.getMaxSpeed() / self.velocity.length()
 
     def getHP(self):
         return self.chasis.hp
+
+    def getMaxSpeed(self):
+        return 100. / self.body.getWeight()
 
     def accelerate(self, acceleration):
         if type(acceleration) == Vector:

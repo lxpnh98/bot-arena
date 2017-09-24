@@ -16,7 +16,7 @@ def main():
     w = world.World(Vector(*screen_size))
     for _ in range(4):
         b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)))
-        b.setVelocity(Vector(random.random() - 0.5, random.random() - 0.5).dot(Vector(100.0, 100.0)))
+        b.setVelocity(Vector(random.random() - 0.5, random.random() - 0.5).dot(Vector(200.0, 200.0)))
         w.addBot(b)
 
     running = True

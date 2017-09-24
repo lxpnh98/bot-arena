@@ -18,7 +18,7 @@ class World:
         for b1 in self.bots:
             for b2 in self.bots:
                 if b1 is not b2 and b1.collidesWith(b2):
-                    print("Bots collided.")
+                    self.separate(b1, b2)
             self.putInBounds(b1)
 
         for bullet in self.bullets:
@@ -60,3 +60,8 @@ class World:
         elif d4 > self.size.y:
             bot.pos.y -= d4 - self.size.y
 
+    def separate(self, b1, b2):
+        collision_vector = b2.pos - b1.pos
+        overlap_vector = collision_vector - collision_vector.normalize() * (b1.size + b2.size)
+        b2.pos -= overlap_vector * (1/2.)
+        b1.pos += overlap_vector * (1/2.)
