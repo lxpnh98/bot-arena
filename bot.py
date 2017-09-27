@@ -12,10 +12,24 @@ class Bot:
         self.size = size
         self.velocity = Vector(0.0, 0.0)
 
-    def update(self, dt, bot_list):
+    def update(self, dt, bot_list, world_size, world_distances):
         self.body.update(dt)
 
         # Decision making
+
+        sum_world_dist = sum(world_distances)
+        if (sum_world_dist > 0):
+            desired_pos = (((world_size * world_distances[1]) + 
+                            (world_size * (1 / 2.) * world_distances[2]) + 
+                            (world_size.widthVector() * world_distances[3]) + 
+                            (world_size.heightVector() * world_distances[4]) + 
+                            ((world_size.widthVector() * (1/2.)) * world_distances[5]) + 
+                            ((world_size.heightVector() * (1/2.)) * world_distances[6]) + 
+                            ((world_size.widthVector() * (1/2.) + world_size.heightVector()) * world_distances[7]) + 
+                            ((world_size.heightVector() * (1/2.) + world_size.widthVector()) * world_distances[8])) * (1. / sum_world_dist))
+            #print(1. / sum_world_dist, desired_pos)
+            self.setVelocity(desired_pos - self.pos)
+                                            
         min_length_bot = None
         min_length = None
         for b in bot_list:
@@ -45,6 +59,9 @@ class Bot:
             self.velocity = Vector(*velocity)
         if self.velocity.length() > self.getMaxSpeed():
             self.velocity *= self.getMaxSpeed() / self.velocity.length()
+
+    def getPos(self):
+        return self.pos
 
     def getHP(self):
         return self.chasis.hp

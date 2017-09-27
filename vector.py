@@ -5,6 +5,9 @@ class Vector:
         self.x = x
         self.y = y
 
+    def __repr__(self):
+        return "(" + str(self.x) + ", " + str(self.y) + ")"
+
     def __add__(self, other):
         return Vector(self.x + other.x, self.y + other.y)
 
@@ -34,3 +37,9 @@ class Vector:
 
     def toTuple(self):
         return (self.x, self.y)
+
+    def widthVector(self):
+        return Vector(self.x, 0)
+
+    def heightVector(self):
+        return Vector(0, self.y)

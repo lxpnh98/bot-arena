@@ -8,8 +8,21 @@ class World:
         self.bots.append(bot)
 
     def update(self, dt):
+        bot_positions = list(map(lambda b: b.getPos(), self.bots))
+        world_distances = [
+            sum(map(lambda v: v.dist2(), bot_positions)), # Top left
+            sum(map(lambda v: (v - self.size).dist2(), bot_positions)), # Bottom right
+            sum(map(lambda v: (v - self.size * (1 / 2.)).dist2(), bot_positions)), # Center
+            sum(map(lambda v: (v - self.size.widthVector()).dist2(), bot_positions)), # Top right
+            sum(map(lambda v: (v - self.size.heightVector()).dist2(), bot_positions)), # Bottom left
+            sum(map(lambda v: (v - (self.size.widthVector() * (1/2.))).dist2(), bot_positions)), # Top center
+            sum(map(lambda v: (v - (self.size.heightVector() * (1/2.))).dist2(), bot_positions)), # Left center
+            sum(map(lambda v: (v - (self.size.widthVector() * (1/2.) + self.size.heightVector())).dist2(), bot_positions)), # Bottom center
+            sum(map(lambda v: (v - (self.size.heightVector() * (1/2.) + self.size.widthVector())).dist2(), bot_positions)) # Right center
+        ]
+
         for b in self.bots:
-            bullet = b.update(dt, self.bots)
+            bullet = b.update(dt, self.bots, self.size, world_distances)
             if bullet != None:
                 self.bullets.append(bullet)
         for b in self.bullets:
