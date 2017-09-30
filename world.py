@@ -37,7 +37,7 @@ class World:
         for bullet in self.bullets:
             for bot in self.bots:
                 if bullet.owner is not bot and bullet.collidesWith(bot):
-                    bot.chasis.hp -= bullet.damage
+                    bot.chasis.body.hp -= bullet.damage
                     self.bullets.remove(bullet)
                     if bot.getHP() <= 0.0:
                         self.bots.remove(bot)
@@ -59,15 +59,15 @@ class World:
         return False
 
     def putInBounds(self, bot):
-        d1 = bot.pos.x - bot.size 
-        d2 = bot.pos.x + bot.size 
+        d1 = bot.pos.x - bot.getSize()
+        d2 = bot.pos.x + bot.getSize()
         if d1 < 0:
             bot.pos.x -= d1
         elif d2 > self.size.x:
             bot.pos.x -= d2 - self.size.x
 
-        d3 = bot.pos.y - bot.size 
-        d4 = bot.pos.y + bot.size 
+        d3 = bot.pos.y - bot.getSize()
+        d4 = bot.pos.y + bot.getSize()
         if d3 < 0:
             bot.pos.y -= d3
         elif d4 > self.size.y:

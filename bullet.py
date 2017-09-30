@@ -17,7 +17,7 @@ class Bullet:
         pygame.draw.circle(screen, pygame.color.Color("black"), (self.pos + pos).toInt().toTuple(), self.size, 0)
 
     def collidesWith(self, bot):
-        if (bot.pos - self.pos).dist2() <= (bot.size + self.size)**2:
+        if (bot.pos - self.pos).dist2() <= (bot.getSize() + self.size)**2:
             return True
         else:
             return False

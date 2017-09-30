@@ -1,9 +1,11 @@
 import sys
 import random
 import pygame
+
 from vector import Vector
 import world
-import bot
+import bot 
+import components
 
 pygame.init()
 
@@ -15,10 +17,25 @@ def main():
     dt = 0.0
 
     w = world.World(Vector(*screen_size))
-    for _ in range(4):
-        b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)))
-        b.setVelocity(Vector(random.random() - 0.5, random.random() - 0.5).dot(Vector(200.0, 200.0)))
-        w.addBot(b)
+
+    b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
+                components.Chasis(None, 5, None),
+                color=(200, 200, 200))
+    b.chasis.addBody(components.Body(None, 20, 10, 10))
+    b.chasis.body.addWeapon(components.Weapon(None))
+    w.addBot(b)
+
+    b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
+                components.Chasis(None, 5, None),
+                color=(200, 200, 200))
+    b.chasis.addBody(components.Body(None, 20, 10, 10))
+    b.chasis.body.addWeapon(components.Weapon(None))
+    w.addBot(b)
+
+    #for i in range(4):
+    #    b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)), color=(30*i, 30*i, 30*i))
+    #    b.setVelocity(Vector(random.random() - 0.5, random.random() - 0.5).dot(Vector(200.0, 200.0)))
+    #    w.addBot(b)
 
     running = True
     while running:
@@ -33,9 +50,9 @@ def main():
         w.display(screen, Vector(0, 0))
         pygame.display.update()
         dt = clock.tick(fps) / 1000.
-    pygame.display.quit()
+    #pygame.display.quit()
     pygame.quit()
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()
-    sys.exit(0)
