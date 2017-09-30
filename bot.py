@@ -19,14 +19,14 @@ class Bot:
 
         sum_world_dist = sum(world_distances)
         if (sum_world_dist > 0):
-            desired_pos = (((world_size * world_distances[1]) + 
-                            (world_size * (1 / 2.) * world_distances[2]) + 
-                            (world_size.widthVector() * world_distances[3]) + 
-                            (world_size.heightVector() * world_distances[4]) + 
-                            ((world_size.widthVector() * (1/2.)) * world_distances[5]) + 
-                            ((world_size.heightVector() * (1/2.)) * world_distances[6]) + 
-                            ((world_size.widthVector() * (1/2.) + world_size.heightVector()) * world_distances[7]) + 
-                            ((world_size.heightVector() * (1/2.) + world_size.widthVector()) * world_distances[8])) * (1. / sum_world_dist))
+            desired_pos = ((world_size * (world_distances[1] - (self.pos - world_size).dist2()) + 
+                           (world_size * (1/2.) * (world_distances[2] - (self.pos - (world_size * (1/2.))).dist2())) + 
+                           (world_size.widthVector() * (world_distances[3] - (self.pos - world_size.widthVector()).dist2())) + 
+                           (world_size.heightVector() * (world_distances[4] - (self.pos - world_size.heightVector()).dist2())) + 
+                           ((world_size.widthVector() * (1/2.)) * (world_distances[5] - (self.pos - (world_size.widthVector() * (1/2.))).dist2())) + 
+                           ((world_size.heightVector()* (1/2.)) * (world_distances[6] - (self.pos - (world_size.heightVector() * (1/2.))).dist2())) + 
+                           ((world_size.widthVector() * (1/2.) + world_size.heightVector()) * (world_distances[7] - (self.pos - (world_size.widthVector() * (1/2.) + world_size.heightVector())).dist2())) + 
+                           ((world_size.heightVector() * (1/2.) + world_size.widthVector()) * (world_distances[8] - (self.pos - (world_size.heightVector() * (1/2.) + world_size.widthVector())).dist2()))) * (1. / sum_world_dist))
             #print(1. / sum_world_dist, desired_pos)
             self.setVelocity(desired_pos - self.pos)
                                             

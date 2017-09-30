@@ -1,3 +1,4 @@
+import sys
 import random
 import pygame
 from vector import Vector
@@ -32,6 +33,9 @@ def main():
         w.display(screen, Vector(0, 0))
         pygame.display.update()
         dt = clock.tick(fps) / 1000.
+    pygame.display.quit()
+    pygame.quit()
 
 if __name__ == "__main__":
     main()
+    sys.exit(0)
