@@ -1,14 +1,19 @@
 class World:
     def __init__(self, size):
-        self.bots = []
+        self.players = []
         self.bullets = []
         self.size = size
 
-    def addBot(self, bot):
-        self.bots.append(bot)
+    def addPlayer(self, player):
+        self.players.append(player)
 
     def update(self, dt):
-        bot_positions = list(map(lambda b: b.getPos(), self.bots))
+        bots = []
+        for p in self.players:
+            if p.bots:
+                bots.append(*p.bots)
+        #bots = [p.bots for p in self.players]
+        bot_positions = list(map(lambda b: b.getPos(), bots))
         world_distances = [
             sum(map(lambda v: v.dist2(), bot_positions)), # Top left
             sum(map(lambda v: (v - self.size).dist2(), bot_positions)), # Bottom right
@@ -21,35 +26,37 @@ class World:
             sum(map(lambda v: (v - (self.size.heightVector() * (1/2.) + self.size.widthVector())).dist2(), bot_positions)) # Right center
         ]
 
-        for b in self.bots:
-            bullet = b.update(dt, self.bots, self.size, world_distances)
+        for b in bots:
+            bullet = b.update(dt, bots, self.size, world_distances)
             if bullet != None:
                 self.bullets.append(bullet)
         for b in self.bullets:
             b.update(dt)
 
-        for b1 in self.bots:
-            for b2 in self.bots:
+        for b1 in bots:
+            for b2 in bots:
                 if b1 is not b2 and b1.collidesWith(b2):
                     self.separate(b1, b2)
             self.putInBounds(b1)
 
         for bullet in self.bullets:
-            for bot in self.bots:
-                if bullet.owner is not bot and bullet.collidesWith(bot):
-                    bot.chasis.body.hp -= bullet.damage
-                    self.bullets.remove(bullet)
-                    if bot.getHP() <= 0.0:
-                        self.bots.remove(bot)
-            if self.isOutOfBounds(bullet.pos):
-                if bullet in self.bullets:
-                    self.bullets.remove(bullet)
+            for p in self.players:
+                for bot in p.bots:
+                    if bullet.owner is not bot and bullet.collidesWith(bot):
+                        bot.chasis.body.hp -= bullet.damage
+                        self.bullets.remove(bullet)
+                        if bot.getHP() <= 0.0:
+                            p.bots.remove(bot)
+                if self.isOutOfBounds(bullet.pos):
+                    if bullet in self.bullets:
+                        self.bullets.remove(bullet)
 
     def display(self, screen, pos):
-        for b in self.bots:
-            b.display(screen, pos)
         for b in self.bullets:
             b.display(screen, pos)
+        for p in self.players:
+            for b in p.bots:
+                b.display(screen, pos)
 
     def isOutOfBounds(self, pos):
         if pos.x < 0.0 or pos.x > self.size.x:

@@ -6,6 +6,7 @@ from vector import Vector
 import world
 import bot 
 import components
+import player
 
 pygame.init()
 
@@ -18,19 +19,25 @@ def main():
 
     w = world.World(Vector(*screen_size))
 
-    b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
-                components.Chasis(None, 5, None),
-                color=(200, 200, 200))
-    b.chasis.addBody(components.Body(None, 20, 10, 10))
-    b.chasis.body.addWeapon(components.Weapon(None))
-    w.addBot(b)
+    p1 = player.Player(None)
+    p2 = player.Player(None)
 
     b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
                 components.Chasis(None, 5, None),
                 color=(200, 200, 200))
     b.chasis.addBody(components.Body(None, 20, 10, 10))
     b.chasis.body.addWeapon(components.Weapon(None))
-    w.addBot(b)
+    p1.addBot(b)
+
+    b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
+                components.Chasis(None, 5, None),
+                color=(200, 200, 200))
+    b.chasis.addBody(components.Body(None, 20, 10, 10))
+    b.chasis.body.addWeapon(components.Weapon(None))
+    p2.addBot(b)
+
+    w.addPlayer(p1)
+    w.addPlayer(p2)
 
     #for i in range(4):
     #    b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)), color=(30*i, 30*i, 30*i))
