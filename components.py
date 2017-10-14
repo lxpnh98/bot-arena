@@ -62,6 +62,9 @@ class Weapon:
         self._time_till_reload = None
 
     def update(self, dt):
+        velocity_diff = self.bot.getAngleDiff()
+        #self.angle += velocity_diff #* dt
+
         if abs(self._target_angle - self.angle) < abs(self._target_angle - (self.angle + 2*math.pi)):
             angle_diff = self._target_angle - self.angle
         else:
@@ -87,7 +90,8 @@ class Weapon:
             return Bullet(self.bot, self.bot.pos, direction * self.power)
 
     def getDirection(self):
-        return Vector(math.cos(self.angle - math.pi / 2), math.sin(self.angle + math.pi / 2))
+        return Vector(math.cos((self.angle + self.bot.getAngle()) - math.pi / 2), math.sin((self.angle + self.bot.getAngle()) + math.pi / 2))
+        #return Vector(math.cos(self.angle - math.pi / 2), math.sin(self.angle + math.pi / 2))
         
 
 class Motor:

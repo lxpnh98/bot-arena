@@ -27,7 +27,10 @@ class Vector:
         return self.x ** 2 + self.y ** 2
         
     def normalize(self):
-        return Vector(self.x, self.y) * (1 / self.length())
+        l = self.length()
+        if l != 0.0:
+            return Vector(self.x, self.y) * (1 / self.length())
+        return Vector(0.0, 0.0)
 
     def angle(self):
         return math.atan2(self.x, self.y)

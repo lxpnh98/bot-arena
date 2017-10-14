@@ -1,3 +1,4 @@
+import random
 import pygame
 
 from vector import *
@@ -6,15 +7,29 @@ from bullet import *
 
 class Bot:
     def __init__(self, pos, chasis=None, color=pygame.color.Color("black")):
+        self.player = None
         self.pos = pos
         self.chasis = chasis
         self.color = color
         self.velocity = Vector(0.0, 0.0)
+        self.last_velocity = self.velocity
 
+        self.displacement = Vector(0.0, 0.0)
+        self.last_displacement = Vector(0.0, 0.0)
         chasis.bot = self
 
     def update(self, dt, bot_list, world_size, world_distances):
+        self.last_velocity = self.velocity
+
         self.chasis.update(dt)
+
+        if self.velocity.length() != 0.0:
+            circle_rel_pos = self.velocity.normalize()
+            self.last_displacement = self.displacement
+            self.displacement = Vector(random.random() - 0.5, random.random() - 0.5).normalize() * 5 * dt
+            self.velocity = (circle_rel_pos + (self.displacement + self.last_displacement) * (1/2.)).normalize() * self.getMaxSpeed()
+        else:
+            self.setVelocity(Vector(random.random() - 0.5, random.random() - 0.5).normalize() * self.getMaxSpeed())
 
         # Decision making
         sum_world_dist = sum(world_distances)
@@ -28,12 +43,12 @@ class Bot:
                            ((world_size.widthVector() * (1/2.) + world_size.heightVector()) * (world_distances[7] - (self.pos - (world_size.widthVector() * (1/2.) + world_size.heightVector())).dist2())) + 
                            ((world_size.heightVector() * (1/2.) + world_size.widthVector()) * (world_distances[8] - (self.pos - (world_size.heightVector() * (1/2.) + world_size.widthVector())).dist2()))) * (1. / sum_world_dist))
             #print(1. / sum_world_dist, desired_pos)
-            self.setVelocity(desired_pos - self.pos)
+            #self.setVelocity(desired_pos - self.pos)
                                             
         min_length_bot = None
         min_length = None
         for b in bot_list:
-            if b is not self:
+            if b.player != self.player:
                 b_dist = (b.pos - self.pos).length()
                 if min_length_bot == None or min_length > b_dist:
                     min_length_bot = b
@@ -43,15 +58,19 @@ class Bot:
         if min_length_bot != None:
             shoot_direction = min_length_bot.pos - self.pos
             for w in self.chasis.body.weapons:
-                w.turn(shoot_direction.angle())
+                w.turn(shoot_direction.angle() - self.getAngle())
             return self.shoot()
         else:
             return None
 
     def display(self, screen, pos):
         pygame.draw.circle(screen, self.color, (self.pos + pos).toInt().toTuple(), self.getSize(), 0)
+
         weapon_pos = (self.pos + pos) + self.chasis.body.weapons[0].getDirection() * (self.getSize() + 4)
         pygame.draw.line(screen, self.color, (self.pos + pos).toInt().toTuple(), weapon_pos.toInt().toTuple(), 3)
+
+        pygame.draw.line(screen, (155,155,155), (self.pos + pos + self.velocity.normalize() * (self.getSize() * (1/3.))).toInt().toTuple(),
+                                                (self.pos + pos + self.velocity.normalize() * (self.getSize() * (4/5.))).toInt().toTuple(), 2)
 
     def setVelocity(self, velocity):
         if type(velocity) == Vector:
@@ -71,7 +90,16 @@ class Bot:
         return self.chasis.body.hp
 
     def getMaxSpeed(self):
-        return 100. / self.chasis.body.getWeight()
+        return 200. / self.chasis.body.getWeight()
+
+    def getAngle(self):
+        return self.velocity.angle()
+
+    def getLastVelocity(self):
+        return self.last_velocity
+
+    def getAngleDiff(self):
+        return self.velocity.angle() - self.last_velocity.angle()
 
     def accelerate(self, acceleration):
         if type(acceleration) == Vector:

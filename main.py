@@ -10,6 +10,14 @@ import player
 
 pygame.init()
 
+def add_rand_bot(player, screen_size, bot_color):
+    b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
+                components.Chasis(None, 5, None),
+                color=bot_color)
+    b.chasis.addBody(components.Body(None, 20, 10, 10))
+    b.chasis.body.addWeapon(components.Weapon(None))
+    player.addBot(b)
+
 def main():
     screen_size = (640, 480)
     screen = pygame.display.set_mode(screen_size)
@@ -22,19 +30,10 @@ def main():
     p1 = player.Player(None)
     p2 = player.Player(None)
 
-    b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
-                components.Chasis(None, 5, None),
-                color=(200, 200, 200))
-    b.chasis.addBody(components.Body(None, 20, 10, 10))
-    b.chasis.body.addWeapon(components.Weapon(None))
-    p1.addBot(b)
-
-    b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
-                components.Chasis(None, 5, None),
-                color=(200, 200, 200))
-    b.chasis.addBody(components.Body(None, 20, 10, 10))
-    b.chasis.body.addWeapon(components.Weapon(None))
-    p2.addBot(b)
+    add_rand_bot(p1, screen_size, (100, 100, 100))
+    add_rand_bot(p1, screen_size, (100, 100, 100))
+    add_rand_bot(p2, screen_size, (200, 200, 200))
+    add_rand_bot(p2, screen_size, (200, 200, 200))
 
     w.addPlayer(p1)
     w.addPlayer(p2)

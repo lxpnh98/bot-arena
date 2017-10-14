@@ -10,8 +10,8 @@ class World:
     def update(self, dt):
         bots = []
         for p in self.players:
-            if p.bots:
-                bots.append(*p.bots)
+            for b in p.bots:
+                bots.append(b)
         #bots = [p.bots for p in self.players]
         bot_positions = list(map(lambda b: b.getPos(), bots))
         world_distances = [
@@ -82,6 +82,6 @@ class World:
 
     def separate(self, b1, b2):
         collision_vector = b2.pos - b1.pos
-        overlap_vector = collision_vector - collision_vector.normalize() * (b1.size + b2.size)
+        overlap_vector = collision_vector - collision_vector.normalize() * (b1.getSize() + b2.getSize())
         b2.pos -= overlap_vector * (1/2.)
         b1.pos += overlap_vector * (1/2.)

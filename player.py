@@ -7,5 +7,6 @@ class Player:
         self.bots = []
 
     def addBot(self, bot):
+        bot.player = self
         self.bots.append(bot)
 
