@@ -64,8 +64,8 @@ class Weapon:
         self._time_till_reload = None
 
     def update(self, dt):
-        velocity_diff = self.bot.getAngleDiff()
-        #self.angle += velocity_diff #* dt
+        #velocity_diff = self.bot.getAngleDiff()
+        #self.angle -= velocity_diff
 
         if abs(self._target_angle - self.angle) < abs(self._target_angle - (self.angle + 2*math.pi)):
             angle_diff = self._target_angle - self.angle

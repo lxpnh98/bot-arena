@@ -54,7 +54,7 @@ def main():
     screen_size = (640, 480)
     screen = pygame.display.set_mode(screen_size)
     clock = pygame.time.Clock()
-    fps = 30
+    fps = 60
     dt = 0.0
 
     w = world.World(Vector(*screen_size))
@@ -107,6 +107,7 @@ def main():
         w.display(screen, Vector(0, 0))
         pygame.display.update()
         dt = clock.tick(fps) / 1000.
+        pygame.display.set_caption("FPS: %i" % (1 / dt))
     #pygame.display.quit()
     pygame.quit()
     sys.exit(0)

@@ -14,8 +14,7 @@ class Bot:
         self.velocity = Vector(0.0, 0.0)
         self.last_velocity = self.velocity
 
-        self.displacement = Vector(0.0, 0.0)
-        self.last_displacement = Vector(0.0, 0.0)
+        self.total_displacement = Vector(0.0, 0.0)
         chasis.bot = self
 
     def update(self, dt, bot_list, world_size, world_distances):
@@ -25,9 +24,10 @@ class Bot:
 
         if self.velocity.length() != 0.0:
             circle_rel_pos = self.velocity.normalize()
-            self.last_displacement = self.displacement
-            self.displacement = Vector(random.random() - 0.5, random.random() - 0.5).normalize() * 5 * dt
-            self.velocity = (circle_rel_pos + (self.displacement + self.last_displacement) * (1/2.)).normalize() * self.getMaxSpeed()
+            displacement = Vector(random.random() - 0.5, random.random() - 0.5) * 10 * dt
+            self.total_displacement += displacement
+            self.total_displacement *= 1 / (1 + 10 * dt)
+            self.velocity = (circle_rel_pos + self.total_displacement).normalize() * self.getMaxSpeed()
         else:
             self.setVelocity(Vector(random.random() - 0.5, random.random() - 0.5).normalize() * self.getMaxSpeed())
 
