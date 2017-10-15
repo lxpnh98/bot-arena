@@ -10,12 +10,44 @@ import player
 
 pygame.init()
 
-def add_rand_bot(player, screen_size, bot_color):
-    b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
-                components.Chasis(None, 5, None),
-                color=bot_color)
-    b.chasis.addBody(components.Body(None, 20, 10, 10))
-    b.chasis.body.addWeapon(components.Weapon(None))
+class Build:
+    NORMAL=0
+    TANK=1
+    LIGHT=2
+    ULTRA_TANK=3
+    ULTRA_LIGHT=4
+
+def add_rand_bot(player, screen_size, bot_color, build=0):
+    if build == Build.NORMAL:
+        b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
+                    components.Chasis(None, 5, None),
+                    color=bot_color)
+        b.chasis.addBody(components.Body(None, 17, 10, 10))
+        b.chasis.body.addWeapon(components.Weapon(None, bullet_size=4, bullet_speed=110, bullet_damage=1, reload_time=1))
+    if build == Build.TANK:
+        b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
+                    components.Chasis(None, 5, None),
+                    color=bot_color)
+        b.chasis.addBody(components.Body(None, 30, 15, 17.5))
+        b.chasis.body.addWeapon(components.Weapon(None, bullet_size=6, bullet_speed=70, bullet_damage=3.25, reload_time=2.5))
+    if build == Build.LIGHT:
+        b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
+                    components.Chasis(None, 5, None),
+                    color=bot_color)
+        b.chasis.addBody(components.Body(None, 10, 7, 7.5))
+        b.chasis.body.addWeapon(components.Weapon(None, bullet_size=3, bullet_speed=150, bullet_damage=0.2, reload_time=0.3))
+    if build == Build.ULTRA_TANK:
+        b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
+                    components.Chasis(None, 5, None),
+                    color=bot_color)
+        b.chasis.addBody(components.Body(None, 50, 40, 50))
+        b.chasis.body.addWeapon(components.Weapon(None, bullet_size=15, bullet_speed=40, bullet_damage=15, reload_time=6))
+    if build == Build.ULTRA_LIGHT:
+        b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
+                    components.Chasis(None, 5, None),
+                    color=bot_color)
+        b.chasis.addBody(components.Body(None, 7, 5, 3))
+        b.chasis.body.addWeapon(components.Weapon(None, bullet_size=2, bullet_speed=300, bullet_damage=0.05, reload_time=0.1))
     player.addBot(b)
 
 def main():
@@ -29,14 +61,33 @@ def main():
 
     p1 = player.Player(None)
     p2 = player.Player(None)
+    p3 = player.Player(None)
+    p4 = player.Player(None)
 
-    add_rand_bot(p1, screen_size, (100, 100, 100))
-    add_rand_bot(p1, screen_size, (100, 100, 100))
-    add_rand_bot(p2, screen_size, (200, 200, 200))
-    add_rand_bot(p2, screen_size, (200, 200, 200))
+    add_rand_bot(p1, screen_size, (255, 0, 0), build=Build.NORMAL)
+    add_rand_bot(p1, screen_size, (255, 0, 0), build=Build.NORMAL)
+    add_rand_bot(p1, screen_size, (255, 0, 0), build=Build.NORMAL)
+    add_rand_bot(p1, screen_size, (255, 0, 0), build=Build.ULTRA_LIGHT)
+
+    add_rand_bot(p2, screen_size, (0, 255, 0), build=Build.ULTRA_TANK)
+    add_rand_bot(p2, screen_size, (0, 255, 0), build=Build.LIGHT)
+    add_rand_bot(p2, screen_size, (0, 255, 0), build=Build.LIGHT)
+    add_rand_bot(p2, screen_size, (0, 255, 0), build=Build.LIGHT)
+
+    add_rand_bot(p3, screen_size, (0, 0, 255), build=Build.TANK)
+    add_rand_bot(p3, screen_size, (0, 0, 255), build=Build.TANK)
+    add_rand_bot(p3, screen_size, (0, 0, 255), build=Build.TANK)
+    add_rand_bot(p3, screen_size, (0, 0, 255), build=Build.LIGHT)
+
+    add_rand_bot(p4, screen_size, (0, 0, 0),   build=Build.TANK)
+    add_rand_bot(p4, screen_size, (0, 0, 0),   build=Build.TANK)
+    add_rand_bot(p4, screen_size, (0, 0, 0),   build=Build.NORMAL)
+    add_rand_bot(p4, screen_size, (0, 0, 0),   build=Build.ULTRA_LIGHT)
 
     w.addPlayer(p1)
     w.addPlayer(p2)
+    w.addPlayer(p3)
+    w.addPlayer(p4)
 
     #for i in range(4):
     #    b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)), color=(30*i, 30*i, 30*i))

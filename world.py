@@ -44,7 +44,8 @@ class World:
                 for bot in p.bots:
                     if bullet.owner is not bot and bullet.collidesWith(bot):
                         bot.chasis.body.hp -= bullet.damage
-                        self.bullets.remove(bullet)
+                        if bullet in self.bullets:
+                            self.bullets.remove(bullet)
                         if bot.getHP() <= 0.0:
                             p.bots.remove(bot)
                 if self.isOutOfBounds(bullet.pos):

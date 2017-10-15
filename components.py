@@ -52,11 +52,13 @@ class Body:
         return self
 
 class Weapon:
-    def __init__(self, bot, angle = 0, turn_speed = math.pi, power=100, reload_time=1):
+    def __init__(self, bot, angle = 0, turn_speed = math.pi, bullet_size = 3, bullet_speed = 100, bullet_damage=1, reload_time=1):
         self.bot = bot
         self.angle = angle
         self.turn_speed = turn_speed
-        self.power = power
+        self.bullet_size = bullet_size
+        self.bullet_speed = bullet_speed
+        self.bullet_damage = bullet_damage
         self._target_angle = angle
         self._reload_time = reload_time
         self._time_till_reload = None
@@ -87,7 +89,7 @@ class Weapon:
         if self._time_till_reload == None:
             self._time_till_reload = self._reload_time
             direction = self.getDirection()
-            return Bullet(self.bot, self.bot.pos, direction * self.power)
+            return Bullet(self.bot, self.bot.pos, direction * self.bullet_speed, self.bullet_damage, self.bullet_size)
 
     def getDirection(self):
         return Vector(math.cos((self.angle + self.bot.getAngle()) - math.pi / 2), math.sin((self.angle + self.bot.getAngle()) + math.pi / 2))
