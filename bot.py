@@ -23,7 +23,7 @@ class Bot:
         self.chasis.update(dt)
 
         if self.velocity.length() != 0.0:
-            circle_rel_pos = self.velocity.normalize()
+            circle_rel_pos = self.velocity.normalize() * 2
             displacement = Vector(random.random() - 0.5, random.random() - 0.5) * 10 * dt
             self.total_displacement += displacement
             self.total_displacement *= 1 / (1 + 10 * dt)
