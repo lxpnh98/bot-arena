@@ -1,11 +1,33 @@
 import math
 from bullet import *
 
-class Chasis:
+class Component:
+    def __init__(self, buy_price=0, sell_price=0):
+        self.buy_price = buy_price
+        self.sell_price = sell_price
+
+    def buy(self, player):
+        if player.cash >= self.getBuyPrice():
+            player.cash -= self.getBuyPrice()
+            player.inventory.append(self)
+
+    def sell(self, player):
+        if self in player.inventory:
+            player.inventory.remove(self):
+            player.cash += self.getSellPrice()
+
+    def getBuyPrice(self):
+        return self.buy_price
+
+    def getSellPrice(self):
+        return self.sell_price
+
+class Chasis(Component):
     def __init__(self, bot, capacity, body=None):
         self.bot = bot
         self.capacity = capacity
         self.body = None
+        super().__init__()
 
     def update(self, dt):
         if self.body:
@@ -15,7 +37,7 @@ class Chasis:
         body.bot = self.bot
         self.body = body
 
-class Body:
+class Body(Component):
     def __init__(self, bot, size, weight, hp):
         self.bot = bot
         self.size = size
@@ -24,6 +46,7 @@ class Body:
         self.weapons = []
         self.motors = []
         self.hp = hp
+        super().__init__()
 
     def update(self, dt):
         for w in self.weapons:
@@ -51,7 +74,7 @@ class Body:
         self.motors.append(motor)
         return self
 
-class Weapon:
+class Weapon(Component):
     def __init__(self, bot, angle = 0, turn_speed = math.pi, bullet_size = 3, bullet_speed = 100, bullet_damage=1, reload_time=1):
         self.bot = bot
         self.angle = angle
@@ -62,6 +85,7 @@ class Weapon:
         self._target_angle = angle
         self._reload_time = reload_time
         self._time_till_reload = None
+        super().__init__()
 
     def update(self, dt):
         #velocity_diff = self.bot.getAngleDiff()
@@ -96,17 +120,18 @@ class Weapon:
         #return Vector(math.cos(self.angle - math.pi / 2), math.sin(self.angle + math.pi / 2))
         
 
-class Motor:
+class Motor(Component):
     def __init__(self, bot, torque=1):
         self.bot = bot
         self.torque = torque
+        super().__init__()
 
     def update(self, dt):
         pass
 
-class Camera:
+class Camera(Component):
     def __init__(self, bot):
-        pass
+        super().__init__()
 
     def update(self, dt):
         pass
