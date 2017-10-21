@@ -2,6 +2,8 @@ import sys
 import random
 import pygame
 
+from pgu import text, gui as pgui
+
 from vector import Vector
 import world
 import bot 
@@ -9,6 +11,12 @@ import components
 import player
 
 pygame.init()
+
+def logRadioAction(arg):
+    print("Hello, ")
+
+def logCheckAction(arg):
+    print("world!")
 
 class Build:
     ULTRA_LIGHT=0
@@ -28,6 +36,7 @@ class Main:
         self.clock = pygame.time.Clock()
         self.fps = 60
         self.dt = 0.0
+        self.init_gui()
         self.create_world()
 
     def run(self):
@@ -45,6 +54,8 @@ class Main:
                 self.running = False
             if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
                 self.running = False
+            # pass event to gui
+            self.gui.event(e)
 
     def update(self):
         if self.screen_state == Main.PLAYING:
@@ -54,6 +65,8 @@ class Main:
         self.screen.fill(pygame.color.Color("white"))
         if self.screen_state == Main.PLAYING:
             self.world.display(self.screen, Vector(0, 0))
+        # draw gui
+        self.gui.paint(self.screen)
 
     def tick(self):
         pygame.display.update()
@@ -63,6 +76,50 @@ class Main:
     def exit(self):
         pygame.quit()
         sys.exit(0)
+
+    def init_gui(self):
+        font = pygame.font.SysFont("default", 18)
+        fontBig = pygame.font.SysFont("default", 24)
+        fontSub = pygame.font.SysFont("default", 20)
+
+        self.gui = pgui.App()
+        layout = pgui.Container(width=400)
+
+        title = pgui.Label("Bot Fight", font=fontBig)
+        layout.add(title, 30, 50)
+
+        # Check button
+        check_button_table = pgui.Table()
+        check_button = pgui.Switch()
+        check_button.connect(pgui.CHANGE, logCheckAction, (check_button, "Check box"))
+        check_button_label = pgui.Label("Check box")
+        check_button_table.add(check_button)
+        check_button_table.add(check_button_label)
+        check_button_table.tr()
+
+        layout.add(check_button_table, 50, 50)
+
+        # Radio buttons
+        radio_button_table = pgui.Table()
+        radio_group = pgui.Group()
+        radio_button1 = pgui.Radio(radio_group, 1)
+        radio_button1_label = pgui.Label("Radio button 1")
+        radio_button_table.add(radio_button1)
+        radio_button_table.add(radio_button1_label)
+        radio_button_table.tr()
+
+        radio_button2 = pgui.Radio(radio_group, 2)
+        radio_button2_label = pgui.Label("Radio button 2")
+        radio_button_table.add(radio_button2)
+        radio_button_table.add(radio_button2_label)
+        radio_button_table.tr()
+
+        layout.add(radio_button_table, 70, 50)
+        radio_group.connect(pgui.CHANGE, logRadioAction, (radio_group, "Radio buttons"))
+
+        # Other gui elements
+
+        self.gui.init(layout)
 
     def create_world(self):
         self.world = world.World(Vector(*self.screen_size))

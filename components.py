@@ -13,7 +13,7 @@ class Component:
 
     def sell(self, player):
         if self in player.inventory:
-            player.inventory.remove(self):
+            player.inventory.remove(self)
             player.cash += self.getSellPrice()
 
     def getBuyPrice(self):

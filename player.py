@@ -10,5 +10,5 @@ class Player:
 class HumanPlayer(Player):
     def __init__(self, name, init_cash=0, init_inventory=[]):
         self.cash = init_cash
-        self.inventory = inventory
+        self.inventory = init_inventory
         super().__init__(name)
