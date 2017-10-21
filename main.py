@@ -32,12 +32,12 @@ class Main:
     def __init__(self):
         self.screen_size = (640, 480)
         self.screen = pygame.display.set_mode(self.screen_size)
-        self.screen_state = Main.PLAYING
+        self.screen_state = Main.MAIN
         self.clock = pygame.time.Clock()
         self.fps = 60
         self.dt = 0.0
+        self.world = None
         self.init_gui()
-        self.create_world()
 
     def run(self):
         self.running = True
@@ -83,10 +83,10 @@ class Main:
         fontSub = pygame.font.SysFont("default", 20)
 
         self.gui = pgui.App()
-        layout = pgui.Container(width=400)
+        layout = pgui.Container(width=self.screen_size[0], height=self.screen_size[1])
 
         title = pgui.Label("Bot Fight", font=fontBig)
-        layout.add(title, 30, 50)
+        layout.add(title, 20, 20)
 
         # Check button
         check_button_table = pgui.Table()
@@ -119,13 +119,19 @@ class Main:
 
         # Other gui elements
         # Normal Buttons
-        button1 = pgui.Button("New game")
-        button1.connect(pgui.CLICK, self.create_world, (0))
-        layout.add(button1, 36, 250)
+        new_game_button = pgui.Button("New game")
+        new_game_button.connect(pgui.CLICK, self.new_game, ())
+        layout.add(new_game_button, 20, 40)
+
+        if self.screen_state == Main.PLAYING:
+            main_menu_button = pgui.Button("Main menu")
+            main_menu_button.connect(pgui.CLICK, self.main_menu, ())
+            layout.add(main_menu_button, 20, 70)
 
         self.gui.init(layout)
 
-    def create_world(self, *args):
+    def new_game(self, *args):
+        self.screen_state = Main.PLAYING
         self.world = world.World(Vector(*self.screen_size))
 
         p1 = player.HumanPlayer(None)
@@ -145,6 +151,13 @@ class Main:
 
         self.world.addPlayer(p1)
         self.world.addPlayer(p2)
+
+        self.init_gui()
+
+    def main_menu(self, *args):
+        self.screen_state = Main.MAIN
+        self.world = None
+        self.init_gui()
 
     def add_bot(self, player, screen_size, bot_color, build=0):
         if build == Build.ULTRA_LIGHT:
