@@ -46,7 +46,7 @@ class Main:
             self.update()
             self.display()
             self.tick()
-        self.exit()
+        self.exit(0)
 
     def handle_events(self):
         for e in pygame.event.get():
@@ -73,9 +73,9 @@ class Main:
         self.dt = self.clock.tick(self.fps) / 1000.
         pygame.display.set_caption("FPS: %i" % (1 / self.dt))
 
-    def exit(self):
+    def exit(self, return_value):
         pygame.quit()
-        sys.exit(0)
+        sys.exit(return_value)
 
     def init_gui(self):
         font = pygame.font.SysFont("default", 18)
@@ -97,7 +97,7 @@ class Main:
         check_button_table.add(check_button_label)
         check_button_table.tr()
 
-        layout.add(check_button_table, 50, 50)
+        #layout.add(check_button_table, 50, 50)
 
         # Radio buttons
         radio_button_table = pgui.Table()
@@ -114,14 +114,18 @@ class Main:
         radio_button_table.add(radio_button2_label)
         radio_button_table.tr()
 
-        layout.add(radio_button_table, 70, 50)
+        #layout.add(radio_button_table, 70, 50)
         radio_group.connect(pgui.CHANGE, logRadioAction, (radio_group, "Radio buttons"))
 
         # Other gui elements
+        # Normal Buttons
+        button1 = pgui.Button("New game")
+        button1.connect(pgui.CLICK, self.create_world, (0))
+        layout.add(button1, 36, 250)
 
         self.gui.init(layout)
 
-    def create_world(self):
+    def create_world(self, *args):
         self.world = world.World(Vector(*self.screen_size))
 
         p1 = player.HumanPlayer(None)
