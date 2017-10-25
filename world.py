@@ -51,7 +51,15 @@ class World:
                 if self.isOutOfBounds(bullet.pos):
                     if bullet in self.bullets:
                         self.bullets.remove(bullet)
-
+        winner = None
+        for p in self.players:
+            if not winner and p.bots != []:
+                winner = p
+            elif p.bots != []:
+                winner = None
+                break
+        return winner
+        
     def display(self, screen, pos):
         for b in self.bullets:
             b.display(screen, pos)

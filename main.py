@@ -5,6 +5,9 @@ import pygame
 from pgu import text, gui as pgui
 
 from vector import Vector
+
+import campaign
+import level
 import world
 import bot 
 import components
@@ -36,7 +39,7 @@ class Main:
         self.clock = pygame.time.Clock()
         self.fps = 60
         self.dt = 0.0
-        self.world = None
+        self.campaign = None
         self.init_gui()
 
     def run(self):
@@ -59,12 +62,12 @@ class Main:
 
     def update(self):
         if self.screen_state == Main.PLAYING:
-            self.world.update(self.dt)
+            self.campaign.update(self.dt)
 
     def display(self):
         self.screen.fill(pygame.color.Color("white"))
         if self.screen_state == Main.PLAYING:
-            self.world.display(self.screen, Vector(0, 0))
+            self.campaign.display(self.screen, Vector(0, 0))
         # draw gui
         self.gui.paint(self.screen)
 
@@ -132,31 +135,54 @@ class Main:
 
     def new_game(self, *args):
         self.screen_state = Main.PLAYING
-        self.world = world.World(Vector(*self.screen_size))
 
-        p1 = player.HumanPlayer(None)
-        p2 = player.Player(None)
-        p3 = player.Player(None)
-        p4 = player.Player(None)
+        if not self.campaign:
+            p1 = player.HumanPlayer(None)
+            p2 = player.Player(None)
+            p3 = player.Player(None)
+            p4 = player.Player(None)
+            w = world.World(Vector(*self.screen_size))
+            self.campaign = campaign.Campaign(p1, [level.Level(w, 10)])
 
-        self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.NORMAL)
-        self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.NORMAL)
-        self.add_bot(p1,self.screen_size, (255, 0, 0), build=Build.NORMAL)
-        self.add_bot(p1,self.screen_size, (255, 0, 0), build=Build.ULTRA_TANK)
+            self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.NORMAL)
+            self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.NORMAL)
+            #self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.NORMAL)
+            #self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.ULTRA_TANK)
 
-        self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.LIGHT)
-        self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.LIGHT)
-        self.add_bot(p2,self.screen_size, (0, 255, 0), build=Build.ULTRA_LIGHT)
-        self.add_bot(p2,self.screen_size, (0, 255, 0), build=Build.TANK)
+            self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.LIGHT)
+            #self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.LIGHT)
+            #self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.ULTRA_LIGHT)
+            self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.TANK)
+            w.addPlayer(p1)
+            w.addPlayer(p2)
 
-        self.world.addPlayer(p1)
-        self.world.addPlayer(p2)
 
+        else:
+            self.campaign.player.bots = []
+            p1 = self.campaign.player
+            p2 = player.Player(None)
+            p3 = player.Player(None)
+            p4 = player.Player(None)
+            w = world.World(Vector(*self.screen_size))
+            self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.NORMAL)
+            self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.NORMAL)
+            #self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.NORMAL)
+            #self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.ULTRA_TANK)
+
+            self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.LIGHT)
+            #self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.LIGHT)
+            #self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.ULTRA_LIGHT)
+            self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.TANK)
+            w.addPlayer(p1)
+            w.addPlayer(p2)
+            self.campaign.levels = [level.Level(w, 10)]
+
+        self.campaign.play_level(self.campaign.levels[0])
         self.init_gui()
 
     def main_menu(self, *args):
         self.screen_state = Main.MAIN
-        self.world = None
+        self.campaign = None
         self.init_gui()
 
     def add_bot(self, player, screen_size, bot_color, build=0):
