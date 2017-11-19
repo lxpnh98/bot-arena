@@ -1,7 +1,8 @@
 class Campaign:
-    def __init__(self, player, levels):
+    def __init__(self, player, levels, store):
         self.player = player
         self.levels = levels
+        self.store = store
         self.completed_levels = []
         self.current_level = None
 

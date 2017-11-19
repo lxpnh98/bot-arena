@@ -2,7 +2,7 @@ import math
 from bullet import *
 
 class Component:
-    def __init__(self, buy_price=0, sell_price=0):
+    def __init__(self, buy_price=10, sell_price=5):
         self.buy_price = buy_price
         self.sell_price = sell_price
 

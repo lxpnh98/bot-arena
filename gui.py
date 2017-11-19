@@ -8,6 +8,7 @@ from vector import Vector
 import campaign
 import world
 import player
+import store
 import components
 import bot
 import level
@@ -88,10 +89,10 @@ class GUI(pgui.App):
 
         if self.screen_state == GUI.PLANNING:
             buy_chasis_button = pgui.Button("Buy Chasis")
-            buy_chasis_button.connect(pgui.CLICK, self.plan_screen, None)
+            buy_chasis_button.connect(pgui.CLICK, self.campaign.store.buy, self.campaign.player, components.Chasis(None, 5, None))
             layout.add(buy_chasis_button, 20, 100)
             buy_body_button = pgui.Button("Buy Body")
-            buy_body_button.connect(pgui.CLICK, self.plan_screen, None)
+            buy_body_button.connect(pgui.CLICK, self.campaign.store.buy, self.campaign.player, components.Body(None, 17, 10, 10))
             layout.add(buy_body_button, 150, 100)
 
             new_game_button = pgui.Button("New game")
@@ -111,6 +112,8 @@ class GUI(pgui.App):
     def update(self, dt):
         if self.screen_state == GUI.PLAYING:
             self.campaign.update(dt)
+            if self.campaign.current_level == None:
+                self.plan_screen()
 
     def display(self):
         self.screen.fill(pygame.color.Color("white"))
@@ -154,7 +157,7 @@ class GUI(pgui.App):
         self.screen_state = GUI.PLANNING
         if self.campaign == None:
             w = world.World(Vector(*self.screen_size))
-            self.campaign = campaign.Campaign(player.HumanPlayer(None), [level.Level(w, 10)])
+            self.campaign = campaign.Campaign(player.HumanPlayer(None), [level.Level(w, 10)], store.Store())
         self.place_ui()
 
     def add_bot(self, player, screen_size, bot_color, build=-1):
