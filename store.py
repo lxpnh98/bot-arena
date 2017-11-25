@@ -9,6 +9,7 @@ class Store:
         if player.cash >= component.buy_price:
             player.cash -= component.buy_price
             player.inventory.append(component)
+        print(player)
         print(player.cash)
         print(player.inventory)
 
