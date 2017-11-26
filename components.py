@@ -119,7 +119,6 @@ class Weapon(Component):
         return Vector(math.cos((self.angle + self.bot.getAngle()) - math.pi / 2), math.sin((self.angle + self.bot.getAngle()) + math.pi / 2))
         #return Vector(math.cos(self.angle - math.pi / 2), math.sin(self.angle + math.pi / 2))
         
-
 class Motor(Component):
     def __init__(self, bot, torque=1):
         self.bot = bot

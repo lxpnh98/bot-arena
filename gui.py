@@ -36,6 +36,7 @@ class GUI(pgui.App):
     MAIN=0
     PLANNING=1
     PLAYING=2
+    STORE=3
     def __init__(self, screen_size):
         super().__init__()
         self.screen_size = (640, 480)
@@ -88,6 +89,15 @@ class GUI(pgui.App):
             layout.add(play_button, 20, 100)
 
         if self.screen_state == GUI.PLANNING:
+            store_button = pgui.Button("Store")
+            store_button.connect(pgui.CLICK, self.store, None)
+            layout.add(store_button, 20, 40)
+
+            new_game_button = pgui.Button("New game")
+            new_game_button.connect(pgui.CLICK, self.new_game, None)
+            layout.add(new_game_button, 20, 100)
+
+        if self.screen_state == GUI.STORE:
             buy_chasis_button = pgui.Button("Buy Chasis")
             buy_chasis_button.connect(pgui.CLICK, self.campaign.store.buy, self.campaign.player, components.Chasis(None, 5, None))
             layout.add(buy_chasis_button, 20, 100)
@@ -95,9 +105,9 @@ class GUI(pgui.App):
             buy_body_button.connect(pgui.CLICK, self.campaign.store.buy, self.campaign.player, components.Body(None, 17, 10, 10))
             layout.add(buy_body_button, 150, 100)
 
-            new_game_button = pgui.Button("New game")
-            new_game_button.connect(pgui.CLICK, self.new_game, None)
-            layout.add(new_game_button, 20, 40)
+            back_button = pgui.Button("Go back")
+            back_button.connect(pgui.CLICK, self.plan_screen, None)
+            layout.add(back_button, 20, 40)
 
         if self.screen_state == GUI.PLAYING:
             main_menu_button = pgui.Button("Main menu")
@@ -158,6 +168,10 @@ class GUI(pgui.App):
         if self.campaign == None:
             w = world.World(Vector(*self.screen_size))
             self.campaign = campaign.Campaign(player.HumanPlayer(None), [level.Level(w, 10)], store.Store())
+        self.place_ui()
+
+    def store(self, *args):
+        self.screen_state = GUI.STORE
         self.place_ui()
 
     def add_bot(self, player, screen_size, bot_color, build=-1):
