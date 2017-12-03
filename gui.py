@@ -32,6 +32,116 @@ font = pygame.font.SysFont("default", 18)
 fontBig = pygame.font.SysFont("default", 24)
 fontSub = pygame.font.SysFont("default", 20)
 
+class State(pgui.App):
+    def __init__(self, screen):
+        super().__init__()
+        self.screen = screen
+
+    def update(self):
+        pass
+
+    def display(self):
+        self.screen.fill(pygame.color.Color("white"))
+        self.paint(self.screen)
+
+class PlayingState(State):
+    def __init(self, screen, screen_size, campaign):
+        super().__init__(screen)
+        self.campaign = campaign
+
+
+        self.campaign.player.bots = []
+        p1 = self.campaign.player
+        p2 = player.Player(None)
+        p3 = player.Player(None)
+        p4 = player.Player(None)
+        w = world.World(Vector(*self.screen_size))
+        self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.NORMAL)
+        self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.NORMAL)
+        #self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.NORMAL)
+        #self.add_bot(p1, self.screen_size, (255, 0, 0), build=Build.ULTRA_TANK)
+        self.add_bot(p1, self.screen_size, (255, 0, 0))
+
+        self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.LIGHT)
+        #self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.LIGHT)
+        #self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.ULTRA_LIGHT)
+        self.add_bot(p2, self.screen_size, (0, 255, 0), build=Build.TANK)
+        self.add_bot(p2, self.screen_size, (0, 255, 0))
+        w.addPlayer(p1)
+        w.addPlayer(p2)
+        self.campaign.levels = [level.Level(w, 10)]
+
+        self.campaign.play_level(self.campaign.levels[0])
+
+
+        layout = pgui.Container(width=screen_size[0], height=screen_size[1])
+        main_menu_button = pgui.Button("Main menu")
+        main_menu_button.connect(pgui.CLICK, self.main_menu, None)
+        layout.add(main_menu_button, 20, 70)
+        play_button = pgui.Button("Plan")
+        play_button.connect(pgui.CLICK, self.plan_screen, None)
+        layout.add(play_button, 20, 100)
+        self.init(layout)
+
+    def update(self):
+        self.campaign.update(dt)
+        if self.campaign.current_level == None:
+            pass
+            #self.plan_screen()
+
+    def display(self):
+        self.screen.fill(pygame.color.Color("white"))
+        self.campaign.display(self.screen, Vector(0, 0))
+        self.pain(self.screen)
+
+class MainState(State):
+    def __init(self, screen, screen_size):
+        super().__init__(screen)
+
+        layout = pgui.Container(width=screen_size[0], height=screen_size[1])
+        play_button = pgui.Button("Plan")
+        play_button.connect(pgui.CLICK, self.plan_screen, None)
+        layout.add(play_button, 20, 100)
+        self.init(layout)
+
+class PlanningState(State):
+    def __init(self, screen, screen_size, campaign):
+        super().__init__(screen)
+        self.campaign = campaign
+        if self.campaign == None:
+            w = world.World(Vector(*screen_size))
+            self.campaign = campaign.Campaign(player.HumanPlayer(None), [level.Level(w, 10)], store.Store())
+
+        layout = pgui.Container(width=screen_size[0], height=screen_size[1])
+        store_button = pgui.Button("Store")
+        store_button.connect(pgui.CLICK, self.store, None)
+        layout.add(store_button, 20, 40)
+        main_menu_button = pgui.Button("Main menu")
+        main_menu_button.connect(pgui.CLICK, self.main_menu, None)
+        layout.add(main_menu_button, 20, 70)
+        new_game_button = pgui.Button("New game")
+        new_game_button.connect(pgui.CLICK, self.new_game, None)
+        layout.add(new_game_button, 20, 100)
+        self.init(layout)
+
+class StoreState(State):
+    def __init(self, screen, screen_size, campaign):
+        super().__init__(screen)
+        self.campaign = campaign
+
+        layout = pgui.Container(width=screen_size[0], height=screen_size[1])
+        buy_chasis_button = pgui.Button("Buy Chasis")
+        buy_chasis_button.connect(pgui.CLICK, self.campaign.store.buy, self.campaign.player, components.Chasis(None, 5, None))
+        layout.add(buy_chasis_button, 20, 100)
+        buy_body_button = pgui.Button("Buy Body")
+        buy_body_button.connect(pgui.CLICK, self.campaign.store.buy, self.campaign.player, components.Body(None, 17, 10, 10))
+        layout.add(buy_body_button, 150, 100)
+
+        back_button = pgui.Button("Go back")
+        back_button.connect(pgui.CLICK, self.plan_screen, None)
+        layout.add(back_button, 20, 40)
+        self.init(layout)
+
 class GUI(pgui.App):
     MAIN=0
     PLANNING=1
@@ -92,6 +202,10 @@ class GUI(pgui.App):
             store_button = pgui.Button("Store")
             store_button.connect(pgui.CLICK, self.store, None)
             layout.add(store_button, 20, 40)
+
+            main_menu_button = pgui.Button("Main menu")
+            main_menu_button.connect(pgui.CLICK, self.main_menu, None)
+            layout.add(main_menu_button, 20, 70)
 
             new_game_button = pgui.Button("New game")
             new_game_button.connect(pgui.CLICK, self.new_game, None)
