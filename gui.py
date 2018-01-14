@@ -144,6 +144,10 @@ class PlanningState(State):
         if self.campaign == None:
             w = world.World(Vector(*screen_size))
             self.campaign = campaign.Campaign(player.HumanPlayer(None), [level.Level(w, 10)], store.Store())
+            c = components.Chasis(None, 5, None)
+            b = components.Body(None, size=7, weight=4, hp=4)
+            w = components.Weapon(None, bullet_size=2, bullet_speed=300, bullet_damage=0.05, reload_time=0.1)
+            self.campaign.player.assembleBot([c, b, w], (0,0), (0, 0, 0))
 
         layout = pgui.Container(width=screen_size[0], height=screen_size[1])
         store_button = pgui.Button("Store")
