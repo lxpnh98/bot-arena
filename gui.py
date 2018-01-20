@@ -56,11 +56,14 @@ class PlayingState(State):
         p3 = player.Player(None)
         p4 = player.Player(None)
         w = world.World(Vector(*screen_size))
-        self.add_bot(p1, screen_size, (255, 0, 0), build=Build.NORMAL)
-        self.add_bot(p1, screen_size, (255, 0, 0), build=Build.NORMAL)
+
+        for b in p1.getAssembly():
+            p1.addBot(b)
+        #self.add_bot(p1, screen_size, (255, 0, 0), build=Build.NORMAL)
+        #self.add_bot(p1, screen_size, (255, 0, 0), build=Build.NORMAL)
         #self.add_bot(p1, screen_size, (255, 0, 0), build=Build.NORMAL)
         #self.add_bot(p1, screen_size, (255, 0, 0), build=Build.ULTRA_TANK)
-        self.add_bot(p1, screen_size, (255, 0, 0))
+        #self.add_bot(p1, screen_size, (255, 0, 0))
 
         self.add_bot(p2, screen_size, (0, 255, 0), build=Build.LIGHT)
         #self.add_bot(p2, screen_size, (0, 255, 0), build=Build.LIGHT)
@@ -147,7 +150,10 @@ class PlanningState(State):
             c = components.Chasis(None, 5, None)
             b = components.Body(None, size=7, weight=4, hp=4)
             w = components.Weapon(None, bullet_size=2, bullet_speed=300, bullet_damage=0.05, reload_time=0.1)
-            self.campaign.player.assembleBot([c, b, w], (0,0), (0, 0, 0))
+            self.campaign.player.addToInventory(c)
+            self.campaign.player.addToInventory(b)
+            self.campaign.player.addToInventory(w)
+            self.campaign.player.assembleBot([c, b, w], Vector(100,100), (0, 0, 0))
 
         layout = pgui.Container(width=screen_size[0], height=screen_size[1])
         store_button = pgui.Button("Store")

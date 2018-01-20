@@ -59,7 +59,7 @@ class World:
                 winner = None
                 break
         return winner
-        
+
     def display(self, screen, pos):
         for b in self.bullets:
             b.display(screen, pos)

@@ -10,7 +10,7 @@ import gui
 import campaign
 import level
 import world
-import bot 
+import bot
 import components
 import player
 

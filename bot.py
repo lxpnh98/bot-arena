@@ -34,17 +34,17 @@ class Bot:
         # Decision making
         sum_world_dist = sum(world_distances)
         if (sum_world_dist > 0):
-            desired_pos = ((world_size * (world_distances[1] - (self.pos - world_size).dist2()) + 
-                           (world_size * (1/2.) * (world_distances[2] - (self.pos - (world_size * (1/2.))).dist2())) + 
-                           (world_size.widthVector() * (world_distances[3] - (self.pos - world_size.widthVector()).dist2())) + 
-                           (world_size.heightVector() * (world_distances[4] - (self.pos - world_size.heightVector()).dist2())) + 
-                           ((world_size.widthVector() * (1/2.)) * (world_distances[5] - (self.pos - (world_size.widthVector() * (1/2.))).dist2())) + 
-                           ((world_size.heightVector()* (1/2.)) * (world_distances[6] - (self.pos - (world_size.heightVector() * (1/2.))).dist2())) + 
-                           ((world_size.widthVector() * (1/2.) + world_size.heightVector()) * (world_distances[7] - (self.pos - (world_size.widthVector() * (1/2.) + world_size.heightVector())).dist2())) + 
+            desired_pos = ((world_size * (world_distances[1] - (self.pos - world_size).dist2()) +
+                           (world_size * (1/2.) * (world_distances[2] - (self.pos - (world_size * (1/2.))).dist2())) +
+                           (world_size.widthVector() * (world_distances[3] - (self.pos - world_size.widthVector()).dist2())) +
+                           (world_size.heightVector() * (world_distances[4] - (self.pos - world_size.heightVector()).dist2())) +
+                           ((world_size.widthVector() * (1/2.)) * (world_distances[5] - (self.pos - (world_size.widthVector() * (1/2.))).dist2())) +
+                           ((world_size.heightVector()* (1/2.)) * (world_distances[6] - (self.pos - (world_size.heightVector() * (1/2.))).dist2())) +
+                           ((world_size.widthVector() * (1/2.) + world_size.heightVector()) * (world_distances[7] - (self.pos - (world_size.widthVector() * (1/2.) + world_size.heightVector())).dist2())) +
                            ((world_size.heightVector() * (1/2.) + world_size.widthVector()) * (world_distances[8] - (self.pos - (world_size.heightVector() * (1/2.) + world_size.widthVector())).dist2()))) * (1. / sum_world_dist))
             #print(1. / sum_world_dist, desired_pos)
             #self.setVelocity(desired_pos - self.pos)
-                                            
+
         min_length_bot = None
         min_length = None
         for b in bot_list:
@@ -53,7 +53,7 @@ class Bot:
                 if min_length_bot == None or min_length > b_dist:
                     min_length_bot = b
                     min_length = b_dist
-        
+
         self.pos += self.velocity * dt
         if min_length_bot != None:
             shoot_direction = min_length_bot.pos - self.pos

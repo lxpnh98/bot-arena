@@ -8,10 +8,10 @@ class Store:
     def buy(self, player, component):
         if player.cash >= component.buy_price:
             player.cash -= component.buy_price
-            player.inventory.append(component)
+            player.addToInventory(component)
         print(player)
         print(player.cash)
-        print(player.inventory)
+        print(player.getInventory())
 
     def sell(self, player, component):
         pass

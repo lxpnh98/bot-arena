@@ -34,7 +34,7 @@ class Vector:
 
     def dist2(self):
         return self.x ** 2 + self.y ** 2
-        
+
     def normalize(self):
         l = self.length()
         if l != 0.0:

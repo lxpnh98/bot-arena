@@ -25,17 +25,27 @@ class Player:
 class HumanPlayer(Player):
     def __init__(self, name, init_cash=0):
         self.cash = init_cash
-        self.inventory = []
-        self.assembly = []
+        self._inventory = []
+        self._assembly = []
         super().__init__(name)
+
+    def getAssembly(self):
+        return self._assembly
+
+    def getInventory(self):
+        return self._inventory
+
+    def addToInventory(self, c):
+        if c not in self._inventory:
+            self._inventory.append(c)
 
     def assembleBot(self, parts, pos, color):
         chasis = None
         body = None
         weapons = []
         for c in parts:
-            #if c not in self.inventory:
-            #    raise NotInInventoryException()
+            if c not in self._inventory:
+                raise NotInInventoryException(c)
             if isinstance(c, components.Chasis):
                 if chasis == None:
                     chasis = c
@@ -54,14 +64,14 @@ class HumanPlayer(Player):
             raise NoChasisException()
         if body == None:
             raise NoBodyException()
-        #self.inventory.remove(chasis)
-        #self.inventory.remove(body)
+        self._inventory.remove(chasis)
+        self._inventory.remove(body)
         b = bot.Bot(pos, chasis, color)
         b.chasis.addBody(body)
         for w in weapons:
-            #self.inventory.remove(w)
+            self._inventory.remove(w)
             b.chasis.body.addWeapon(w)
-        self.assembly.append(b)
+        self._assembly.append(b)
 
     def disassembleBot(self, bot):
         pass
