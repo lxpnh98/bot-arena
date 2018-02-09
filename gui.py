@@ -154,6 +154,8 @@ class PlanningState(State):
             self.campaign.player.addToInventory(b)
             self.campaign.player.addToInventory(w)
             self.campaign.player.assembleBot([c, b, w], Vector(100,100), (0, 0, 0))
+            #self.campaign.player.disassembleBot(self.campaign.player.getAssembly()[0])
+            #self.campaign.player.assembleBot([c, b, w], Vector(100,100), (0, 0, 0))
 
         layout = pgui.Container(width=screen_size[0], height=screen_size[1])
         store_button = pgui.Button("Store")

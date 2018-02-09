@@ -13,6 +13,8 @@ class NoBodyException(Exception): pass
 
 class NotInInventoryException(Exception): pass
 
+class NotInAssemblyException(Exception): pass
+
 class Player:
     def __init__(self, name):
         self.name = name
@@ -74,5 +76,27 @@ class HumanPlayer(Player):
         self._assembly.append(b)
 
     def disassembleBot(self, bot):
-        pass
+        if bot not in self._assembly:
+            raise NotInAssemblyException(bot)
+        self._assembly.remove(bot)
+        body = bot.chasis.body
+        bot.chasis.body = None
+        self._inventory.append(bot.chasis)
+        if body != None:
+            for c in body.cameras:
+                self._inventory.append(c)
+                assert(c in body.cameras)
+                body.cameras.remove(c)
+            assert(body.cameras == [])
+            for w in body.weapons:
+                self._inventory.append(w)
+                assert(w in body.weapons)
+                body.weapons.remove(w)
+            assert(body.weapons == [])
+            for m in body.motors:
+                self._inventory.append(m)
+                assert(m in body.motors)
+                body.motors.remove(m)
+            assert(body.motors == [])
+            self._inventory.append(body)
 
