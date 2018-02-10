@@ -42,9 +42,7 @@ class Body(Component):
         self.bot = bot
         self.size = size
         self.weight = weight
-        self.cameras = []
         self.weapons = []
-        self.motors = []
         self.initHP = hp
         self.hp = hp
         super().__init__()
@@ -52,27 +50,13 @@ class Body(Component):
     def update(self, dt):
         for w in self.weapons:
             w.update(dt)
-        for m in self.motors:
-            m.update(dt)
-        for c in self.cameras:
-            c.update(dt)
 
     def getWeight(self):
         return self.weight
 
-    def addCamera(self, camera):
-        camera.bot = self.bot
-        self.cameras.append(camera)
-        return self
-
     def addWeapon(self, weapon):
         weapon.bot = self.bot
         self.weapons.append(weapon)
-        return self
-
-    def addMotor(self, motor):
-        motor.bot = self.bot
-        self.motors.append(motor)
         return self
 
 class Weapon(Component):
@@ -120,18 +104,3 @@ class Weapon(Component):
         return Vector(math.cos((self.angle + self.bot.getAngle()) - math.pi / 2), math.sin((self.angle + self.bot.getAngle()) + math.pi / 2))
         #return Vector(math.cos(self.angle - math.pi / 2), math.sin(self.angle + math.pi / 2))
 
-class Motor(Component):
-    def __init__(self, bot, torque=1):
-        self.bot = bot
-        self.torque = torque
-        super().__init__()
-
-    def update(self, dt):
-        pass
-
-class Camera(Component):
-    def __init__(self, bot):
-        super().__init__()
-
-    def update(self, dt):
-        pass

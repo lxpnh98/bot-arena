@@ -25,7 +25,7 @@ class Player:
         self.bots.append(bot)
 
 class HumanPlayer(Player):
-    def __init__(self, name, init_cash=0):
+    def __init__(self, name, init_cash=100):
         self.cash = init_cash
         self._inventory = []
         self._assembly = []
@@ -83,21 +83,11 @@ class HumanPlayer(Player):
         bot.chasis.body = None
         self._inventory.append(bot.chasis)
         if body != None:
-            for c in body.cameras:
-                self._inventory.append(c)
-                assert(c in body.cameras)
-                body.cameras.remove(c)
-            assert(body.cameras == [])
             for w in body.weapons:
                 self._inventory.append(w)
                 assert(w in body.weapons)
                 body.weapons.remove(w)
             assert(body.weapons == [])
-            for m in body.motors:
-                self._inventory.append(m)
-                assert(m in body.motors)
-                body.motors.remove(m)
-            assert(body.motors == [])
             self._inventory.append(body)
 
     def restoreBots(self):
