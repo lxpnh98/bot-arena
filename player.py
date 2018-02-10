@@ -100,3 +100,6 @@ class HumanPlayer(Player):
             assert(body.motors == [])
             self._inventory.append(body)
 
+    def restoreBots(self):
+        for b in self._assembly:
+            b.chasis.body.hp = b.chasis.body.initHP

@@ -45,6 +45,7 @@ class Body(Component):
         self.cameras = []
         self.weapons = []
         self.motors = []
+        self.initHP = hp
         self.hp = hp
         super().__init__()
 

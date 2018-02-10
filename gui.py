@@ -57,6 +57,8 @@ class PlayingState(State):
         p4 = player.Player(None)
         w = world.World(Vector(*screen_size))
 
+        p1.restoreBots()
+
         for b in p1.getAssembly():
             p1.addBot(b)
         #self.add_bot(p1, screen_size, (255, 0, 0), build=Build.NORMAL)
