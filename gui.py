@@ -97,34 +97,34 @@ class PlayingState(State):
             build = random.randint(Build.ULTRA_LIGHT, Build.ULTRA_TANK)
         if build == Build.ULTRA_LIGHT:
             b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
-                        components.Chasis(None, 5, None),
+                        components.Chasis(5, None),
                         color=bot_color)
-            b.chasis.addBody(components.Body(None, size=7, weight=4, hp=4))
-            b.chasis.body.addWeapon(components.Weapon(None, bullet_size=2, bullet_speed=300, bullet_damage=0.05, reload_time=0.1))
+            b.chasis.addBody(components.Body(size=7, weight=4, hp=4))
+            b.chasis.body.addWeapon(components.Weapon(bullet_size=2, bullet_speed=300, bullet_damage=0.05, reload_time=0.1))
         elif build == Build.LIGHT:
             b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
-                        components.Chasis(None, 5, None),
+                        components.Chasis(5, None),
                         color=bot_color)
-            b.chasis.addBody(components.Body(None, size=10, weight=7, hp=7))
-            b.chasis.body.addWeapon(components.Weapon(None, bullet_size=3, bullet_speed=140, bullet_damage=0.2, reload_time=0.3))
+            b.chasis.addBody(components.Body(size=10, weight=7, hp=7))
+            b.chasis.body.addWeapon(components.Weapon(bullet_size=3, bullet_speed=140, bullet_damage=0.2, reload_time=0.3))
         elif build == Build.NORMAL:
             b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
-                        components.Chasis(None, 5, None),
+                        components.Chasis(5, None),
                         color=bot_color)
-            b.chasis.addBody(components.Body(None, size=17, weight=10, hp=10))
-            b.chasis.body.addWeapon(components.Weapon(None, bullet_size=4, bullet_speed=110, bullet_damage=1, reload_time=1))
+            b.chasis.addBody(components.Body(size=17, weight=10, hp=10))
+            b.chasis.body.addWeapon(components.Weapon(bullet_size=4, bullet_speed=110, bullet_damage=1, reload_time=1))
         elif build == Build.TANK:
             b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
-                        components.Chasis(None, 5, None),
+                        components.Chasis(5, None),
                         color=bot_color)
-            b.chasis.addBody(components.Body(None, size=30, weight=15, hp=17.5))
-            b.chasis.body.addWeapon(components.Weapon(None, bullet_size=6, bullet_speed=70, bullet_damage=3.25, reload_time=2.5))
+            b.chasis.addBody(components.Body(size=30, weight=15, hp=17.5))
+            b.chasis.body.addWeapon(components.Weapon(bullet_size=6, bullet_speed=70, bullet_damage=3.25, reload_time=2.5))
         elif build == Build.ULTRA_TANK:
             b = bot.Bot(Vector(random.random(), random.random()).dot(Vector(*screen_size)),
-                        components.Chasis(None, 5, None),
+                        components.Chasis(5, None),
                         color=bot_color)
-            b.chasis.addBody(components.Body(None, size=50, weight=40, hp=50))
-            b.chasis.body.addWeapon(components.Weapon(None, bullet_size=15, bullet_speed=40, bullet_damage=15, reload_time=6))
+            b.chasis.addBody(components.Body(size=50, weight=40, hp=50))
+            b.chasis.body.addWeapon(components.Weapon(bullet_size=15, bullet_speed=40, bullet_damage=15, reload_time=6))
         player.addBot(b)
 
     def display(self):
@@ -149,9 +149,9 @@ class PlanningState(State):
         if self.campaign == None:
             w = world.World(Vector(*screen_size))
             self.campaign = campaign.Campaign(player.HumanPlayer(None), [level.Level(w, 10)], store.Store())
-            c = components.Chasis(None, 5, None)
-            b = components.Body(None, size=7, weight=4, hp=4)
-            w = components.Weapon(None, bullet_size=2, bullet_speed=300, bullet_damage=0.05, reload_time=0.1)
+            c = components.Chasis(5, None)
+            b = components.Body(size=7, weight=4, hp=4)
+            w = components.Weapon(bullet_size=2, bullet_speed=300, bullet_damage=0.05, reload_time=0.1)
             self.campaign.player.addToInventory(c)
             self.campaign.player.addToInventory(b)
             self.campaign.player.addToInventory(w)

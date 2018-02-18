@@ -23,8 +23,8 @@ class Component:
         return self.sell_price
 
 class Chasis(Component):
-    def __init__(self, bot, capacity, body=None):
-        self.bot = bot
+    def __init__(self, capacity, body=None):
+        self.bot = None
         self.capacity = capacity
         self.body = None
         super().__init__()
@@ -38,8 +38,8 @@ class Chasis(Component):
         self.body = body
 
 class Body(Component):
-    def __init__(self, bot, size, weight, hp):
-        self.bot = bot
+    def __init__(self, size, weight, hp):
+        self.bot = None
         self.size = size
         self.weight = weight
         self.weapons = []
@@ -60,8 +60,8 @@ class Body(Component):
         return self
 
 class Weapon(Component):
-    def __init__(self, bot, angle = 0, turn_speed = math.pi, bullet_size = 3, bullet_speed = 100, bullet_damage=1, reload_time=1):
-        self.bot = bot
+    def __init__(self, angle = 0, turn_speed = math.pi, bullet_size = 3, bullet_speed = 100, bullet_damage=1, reload_time=1):
+        self.bot = None
         self.angle = angle
         self.turn_speed = turn_speed
         self.bullet_size = bullet_size
